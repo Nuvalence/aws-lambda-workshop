@@ -6,8 +6,8 @@ In this section we will integrate DynamoDB with our Lambda function.
 - Configuring a role to allow read/write access to that table
 
 ## Implementing the Lambda Handler
-Implement a handler `FavoriteColorRequestHandler.java` that takes as input a `FavoriteColorModel` and writes to a DynamoDB table using the provided `DynamoWriter`. 
-[An example solution](FavoriteColorRequestHandler.java) has been provided. 
+Implement a handler `FavoriteColorRequestHandler.java` or `index.js` that takes as input a `FavoriteColorModel` and writes to a DynamoDB table using the provided `DynamoWriter`. 
+[Two example solutions](FavoriteColorRequestHandler.java)(index.js) have been provided. 
 
 ### Creating a Lambda Function
 Before starting this section create a new Lambda function named `nuvalence-workshop` using the same steps found in the previous 
@@ -53,7 +53,7 @@ on the DynamoDB table we created.
 ### Updating Lambda Settings
 Now that our Lambda function has access to the table, navigate back to the function and confirm that "Amazon DynamoDB" appears
 in the "Designer" section. We just need to update some settings before starting to test.
-1. First change the handler to `io.nuvalence.workshops.aws.lambda.FavoriteColorRequestHandler::handleRequest`
+1. First change the handler to `io.nuvalence.workshops.aws.lambda.FavoriteColorRequestHandler::handleRequest` in Java or `module.exports = handleRequest` in JavaScript
     
     If you're interested in looking at the code you'll notice the handler doesn't do anything besides call a separate method to
 write the data to DynamoDB. This is because we don't need to worry about decrypting the data or making any other transformations 
@@ -121,9 +121,25 @@ is available to call and it should look like `https://xxxxxxxx.execute-api.us-ea
 5. Copy the "Invoke URL" to use in the next step when testing.
 
 ### Testing the API with Curl (or Postman)
-To test our deployed API we'll be making a request to the endpoint using Curl, however if you prefer Postman you can use that instead.
+To test our deployed API we'll be making a request to the endpoint using Curl, however if you prefer Postman you can use that instead. If you used the JavaScript solution, you may experience auth errors when using curl, so try and stick to Postman.
+
+Curl Solution: 
 In a commandline window write the following command to make a POST request that sends a request body containing JSON:
 ```
 curl -d '{"name":"<your name> Deployed", "color":"<any color>"}' -X POST <INVOKEURL>/demo
 ```
 Once the request has completed go back to your DynamoDB table to check the data.
+
+Postman Solution:
+1. Open Postman and create a new POST request to the API Invoke URL
+2. On the AWS Console, navigate to IAM > Users > <YourUsername>, and then click Security Credentials. Under the "Access Keys" heading, click create access key (even if you have one, this shouldn't matter. You can always delete and recreate keys) and copy your AccessKey and SecretKey
+3. Under the Authorization tab on Postman, select Type "AWS Signature" and copy your AccessKey, SecretKey and AWS region (which should be indicated in the URL, eg. us-east-2)
+4. Under the Body tab, enter JSON that will be sent to the Lambda function in this format:
+    ```
+    {
+        "name":"<your name> API",
+        "color":"<any color>"
+    }
+    ```
+5. Once the request has finished, check your DynamoDB table to ensure the data was entered into the table
+ 

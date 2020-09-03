@@ -7,21 +7,23 @@ In this section we will be creating a basic Lambda function in the AWS console.
  - Testing a Lambda function via the AWS Console
  
 ## Implementing the Lambda Handler
-Implement a handler `HelloWorldHandler.java` that takes as input a `String` and returns a `String` formatted `"Hello ${input}."`. 
-[An example solution](HelloWorldHandler.java) has been provided. 
+Implement a handler `HelloWorldHandler.java` or `index.js` that takes as input a `String` and returns a `String` formatted `"Hello ${input}."`. 
+[Two example solutions](HelloWorldHandler.java)(index.js) have been provided. 
 
 ## Creating a Lambda Function
 The first step in the process is to create a new Lambda function. 
 
  1. Log in to the AWS console and navigating to 
 "Services" -> "Lambda" -> "Create Function". 
- 2. The code samples in this workshop are written in Java, so select the Java 8 runtime. 
+ 2. The code samples in this workshop are written in Java, so select the Java 8 runtime (or Node if you are using the JavaScript solutions). 
  3. Set the name to `nuvalence-hello-world` or a custom name using only letters, numbers, hyphens, or underscores.
  4. Expand the "Choose or create an execution role" section and confirm that "Create a new role with basic Lambda permissions" is the selected option. This will 
 create a new role for the function and automatically attach a policy which allows the Lambda function to write logs to Amazon CloudWatch. 
  5. Click "Create Function".
 
 ## Building a Lambda Function
+
+[Note: You can skip this if you are using JavaScript!]
 
 Now that we have a Lambda function created we need to upload code for it to execute when triggered. To do this we'll use gradle
 to build a code archive. 
@@ -62,7 +64,7 @@ before calling a method that does the actual computing. In this section of the w
 all we are doing is returning a string, so the handler will do the formatting itself instead of calling a
 separate method. However in later sections we will be separating the handler from the computing method.
 
-1. The format for declaring a handler is `package.class::method` so in this case use `io.nuvalence.workshops.aws.lambda.HelloWorldHandler::handleRequest`. 
+1. The format for declaring a handler is `package.class::method` so in this case use `io.nuvalence.workshops.aws.lambda.HelloWorldHandler::handleRequest`. In JavaScript, the format is adding `module.exports = method` as the last line of your code, or in this case `module.exports = handleRequest`.
 2. After setting the handler click "Save" in the top right to save all the changes we made.
 
 ## Testing Your Function
